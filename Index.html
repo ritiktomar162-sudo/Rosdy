@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Rose 🌹</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Nunito:wght@400;700&display=swap');
+
+        /* --- Reset & Base --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body, html { height: 100%; width: 100%; overflow: hidden; font-family: 'Nunito', sans-serif; }
+
+        /* --- Romantic Background --- */
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fff0f0 100%);
+            color: #d63384;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* --- Floating Background Elements --- */
+        #bg-elements {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none; overflow: hidden;
+        }
+
+        .floating-item {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: floatUp linear infinite;
+            opacity: 0.6;
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- Main Container --- */
+        .container {
+            z-index: 10;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Typography --- */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: #c2185b;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            animation: heartbeat 3s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* --- Screens Logic --- */
+        .screen { display: none; width: 100%; animation: fadeIn 1.5s ease; }
+        .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* --- Screen 1: Intro --- */
+        .btn-start {
+            background: linear-gradient(45deg, #ff4081, #ff80ab);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 64, 129, 0.4);
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            transition: transform 0.2s;
+            animation: pulseBtn 2s infinite;
+        }
+        .btn-start:active { transform: scale(0.95); }
+
+        /* --- Screen 2: Typing --- */
+        #typing-box {
+            min-height: 80px;
+            font-size: 1.2rem;
+            color: #880e4f;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .cursor { display: inline-block; width: 3px; background-color: #c2185b; animation: blink 1s infinite; }
+
+        /* --- Screen 3: Interactive Heart --- */
+        .love-container {
+            position: relative;
+            margin-top: 20px;
+            width: 100%;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            background: white;
+            color: #d81b60;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(216, 27, 96, 0.15);
+            margin-bottom: 40px;
+            width: 100%;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .message-bubble.visible { opacity: 1; transform: translateY(0); }
+
+        .heart-btn {
+            width: 90px; height: 90px;
+            background: linear-gradient(to bottom right, #ff5c8d, #d81b60);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(216, 27, 96, 0.4);
+            transition: transform 0.1s;
+            user-select: none; z-index: 20;
+            border: 4px solid white;
+        }
+        .heart-btn:active { transform: scale(0.85); }
+
+        /* --- Screen 4: Finale (The Photo) --- */
+        .photo-frame {
+            width: 260px;
+            height: 320px;
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            /* The Magical Glow */
+            box-shadow: 0 0 0 rgba(255, 105, 180, 0), 0 20px 40px rgba(0,0,0,0.1);
+            transform: rotate(-3deg);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s, box-shadow 1s;
+        }
+
+        /* When revealed, add the glow */
+        .photo-frame.revealed {
+            box-shadow: 0 0 30px rgba(255, 64, 129, 0.6), 0 20px 40px rgba(0,0,0,0.2);
+            transform: rotate(0deg) scale(1.05);
+            z-index: 100;
+        }
+
+        .actual-photo {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* YOUR PHOTO HERE */
+            background-image: url('herphoto.png'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px) grayscale(100%) brightness(1.2);
+            transition: all 2s cubic-bezier(0.19, 1, 0.22, 1); /* Elegant transition */
+            z-index: 1;
+        }
+
+        .reveal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,192,203,1) 100%);
+            z-index: 2;
+            display: flex; align-items: center; justify-content: center;
+            color: #c2185b; font-weight: bold; font-size: 1.4rem;
+            transition: opacity 1.5s;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .photo-frame.revealed .actual-photo { filter: blur(0) grayscale(0) brightness(1); }
+        .photo-frame.revealed .reveal-overlay { opacity: 0; pointer-events: none; }
+
+        .final-msg {
+            margin-top: 25px;
+            font-size: 1.2rem;
+            color: #880e4f;
+            opacity: 0;
+            transition: opacity 2s 1s; /* Delay appearance */
+        }
+        .photo-frame.revealed + .final-msg { opacity: 1; }
+
+        /* --- Falling Hearts (Confetti) --- */
+        .confetti {
+            position: absolute;
+            font-size: 1.5rem;
+            top: -10vh;
+            animation: fall linear forwards;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulseBtn { 0% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0.7); } 70% { box-shadow: 0 0 0 20px rgba(255, 64, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 64, 129, 0); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div id="bg-elements"></div>
+
+    <div class="container">
+        
+        <div id="screen-intro" class="screen active">
+            <h1>Happy Rose Day</h1>
+            <p style="margin-bottom: 30px; background: none; box-shadow: none;">Wait, I have something for you...</p>
+            <button class="btn-start" onclick="startExperience()">Tap to Open 🌹</button>
+        </div>
+
+        <div id="screen-narrative" class="screen">
+            <div id="typing-box"></div>
+        </div>
+
+        <div id="screen-interactive" class="screen">
+            <div class="love-container">
+                <div id="msg-bubble" class="message-bubble">Tap the heart...</div>
+                <div class="heart-btn" onclick="revealLove()">❤️</div>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.7;">(Tap slowly... read every word)</p>
+        </div>
+
+        <div id="screen-finale" class="screen">
+            <h1 style="font-size: 2.5rem;">My Beautiful Flower</h1>
+            <div class="photo-frame" id="photo-frame" onclick="revealPhoto()">
+                <div class="actual-photo"></div>
+                <div class="reveal-overlay">
+                    <span>Tap to See Her...</span>
+                </div>
+            </div>
+            <div class="final-msg">
+                <p>You are the most precious Rose<br>in my garden of life. ❤️</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- The "Aww" Story Lines ---
+        const romanticLines = [
+            "I was looking for the perfect rose...",
+            "One that never fades...",
+            "One that is soft and sweet...",
+            "But I realized something.",
+            "The most beautiful rose...",
+            "Is the one holding this phone. 🌹",
+            "I Love You so much! ❤️"
+        ];
+
+        let clickCount = 0;
+        
+        // --- Background Floating Elements ---
+        function createBackground() {
+            const bgContainer = document.getElementById('bg-elements');
+            const icons = ['🌹', '🌸', '❤️', '✨', '🦋']; // Added butterfly
+            
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.classList.add('floating-item');
+                el.innerText = icons[Math.floor(Math.random() * icons.length)];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.animationDuration = (Math.random() * 10 + 10) + 's'; // Slower, more elegant
+                el.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
+                bgContainer.appendChild(el);
+                setTimeout(() => { el.remove(); }, 20000);
+            }, 600);
+        }
+        createBackground();
+
+        // --- Sound Effect ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playChime() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = 'sine'; // Soft sine wave
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
+            osc.frequency.exponentialRampToValueAtTime(550, audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Lower volume
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.5);
+        }
+
+        // --- Transitions ---
+        function switchScreen(hideId, showId) {
+            document.getElementById(hideId).classList.remove('active');
+            setTimeout(() => {
+                document.getElementById(showId).classList.add('active');
+            }, 200);
+        }
+
+        // --- Step 1 ---
+        function startExperience() {
+            playChime();
+            switchScreen('screen-intro', 'screen-narrative');
+            setTimeout(() => {
+                // More romantic opening text
+                typeWriter("Hey my love... <br> I wanted to remind you how special you are.", "typing-box", () => {
+                    setTimeout(() => {
+                        switchScreen('screen-narrative', 'screen-interactive');
+                    }, 2000);
+                });
+            }, 500);
+        }
+
+        // --- Typing ---
+        function typeWriter(text, elementId, callback) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = '<span class="cursor">|</span>';
+            let i = 0; let currentText = ""; let isTag = false;
+            function type() {
+                if (i < text.length) {
+                    let char = text.charAt(i);
+                    if (char === '<') isTag = true;
+                    if (char === '>') isTag = false;
+                    currentText += char;
+                    element.innerHTML = currentText + '<span class="cursor">|</span>';
+                    i++;
+                    let delay = isTag ? 0 : 70; // Slower typing for "feeling"
+                    if (char === '.' || char === '?') delay = 400; 
+                    setTimeout(type, delay);
+                } else {
+                    if (callback) callback();
+                }
+            }
+            type();
+        }
+
+        // --- Step 2: Story Reveal ---
+        function revealLove() {
+            playChime();
+            const bubble = document.getElementById('msg-bubble');
+            const heartBtn = document.querySelector('.heart-btn');
+
+            bubble.classList.remove('visible');
+            
+            setTimeout(() => {
+                if (clickCount < romanticLines.length) {
+                    bubble.innerText = romanticLines[clickCount];
+                    bubble.classList.add('visible');
+                    // Add a tiny heart splash per click
+                    spawnMiniHeart(); 
+                    clickCount++;
+                } else {
+                    switchScreen('screen-interactive', 'screen-finale');
+                }
+            }, 300);
+        }
+
+        // --- Step 3: The Big Reveal ---
+        function revealPhoto() {
+            const frame = document.getElementById('photo-frame');
+            if (!frame.classList.contains('revealed')) {
+                playChime();
+                frame.classList.add('revealed');
+                // Explosion of hearts
+                fireConfetti();
+            }
+        }
+
+        // --- Visual Effects ---
+        function spawnMiniHeart() {
+            const heart = document.createElement('div');
+            heart.innerText = '❤️';
+            heart.style.position = 'fixed';
+            heart.style.left = '50%';
+            heart.style.bottom = '20%';
+            heart.style.transform = 'translate(-50%, 0)';
+            heart.style.fontSize = '2rem';
+            heart.style.animation = 'floatUp 1s ease-out forwards';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        }
+
+        function fireConfetti() {
+            const emojis = ['❤️', '🌹', '💖', '😍'];
+            for (let i = 0; i < 100; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                // Random size
+                conf.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+                document.body.appendChild(conf);
+                
+                setTimeout(() => conf.remove(), 5000);
+            }
+        }
+    </script>
+</body>
+</html>
